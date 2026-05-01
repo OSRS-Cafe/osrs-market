@@ -1,5 +1,5 @@
-import type {NumberFormatType} from "../../types/NumberFormatType.ts";
 import {reverseString} from "../strings";
+import type {NumberFormatType} from "../../zustand/SettingsStore.ts";
 
 function getNumberFormatSeparator(format: NumberFormatType): string {
 	switch (format) {
