@@ -1,0 +1,29 @@
+.container {
+    --width: 128px;
+    --height: 128px;
+
+    width: var(--width);
+    height: var(--height);
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.icon {
+    image-rendering: pixelated;
+    width: 80%;
+    height: 80%;
+    object-fit: contain;
+}
+
+.icon.spin {
+    animation: spin 2s linear infinite;
+
+    -webkit-user-drag: none;
+}
+
+@keyframes spin {
+    from {transform:rotate(0deg);}
+    to {transform:rotate(-360deg);}
+}

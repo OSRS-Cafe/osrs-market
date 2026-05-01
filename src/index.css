@@ -45,3 +45,24 @@
 body {
     margin: 0;
 }
+
+.skeleton-text {
+    width: 200px;
+    height: 16px;
+    border-radius: 4px;
+    background: #e0e0e0;
+    animation: pulse 1.5s infinite ease-in-out;
+    color: transparent;
+}
+
+@keyframes pulse {
+    0% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.4;
+    }
+    100% {
+        opacity: 1;
+    }
+}

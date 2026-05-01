@@ -20,5 +20,5 @@ export type FetchPriceType = {
 }
 
 export type FetchPricesType = {
-	data: Record<number, FetchMappingsType>;
+	data: Record<number, FetchPriceType>;
 }
