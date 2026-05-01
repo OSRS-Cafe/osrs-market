@@ -1,10 +1,11 @@
 import ThemeDropdown from "./components/ThemeDropdown";
 import PriceDisplay from "./components/PriceDisplay";
 import NumberFormatDropdown from "./components/NumberFormatDropdown";
-import ItemDisplaySmall from "./components/ItemDisplaySmall/ItemDisplaySmall.tsx";
 import {useEffect} from "react";
 import {useMarketDataStore} from "./zustand/MarketDataStore.ts";
 import {useShallow} from "zustand/react/shallow";
+import BasicFlexRow from "./components/BasicFlexRow";
+import ItemDisplaySquare from "./components/ItemDisplaySquare";
 
 function App() {
 	const { loadMarketData, updateMarketData } = useMarketDataStore(
@@ -36,13 +37,13 @@ function App() {
 			<ThemeDropdown />
 			<NumberFormatDropdown/>
 			<div>Loaded: {allItems?.length}</div>
-			<div style={{display: "flex", flexDirection: "column"}}>
+			<BasicFlexRow style={{justifyContent: "center"}}>
 				{allItems && (
-					allItems.slice(0, 64).map((allItem) => (
-						<ItemDisplaySmall key={allItem.id} id={allItem.id}/>
+					allItems.slice(0, 256).map((allItem) => (
+						<ItemDisplaySquare key={allItem.id} id={allItem.id}/>
 					))
 				)}
-			</div>
+			</BasicFlexRow>
 		</>
 	);
 }

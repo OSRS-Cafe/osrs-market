@@ -1,0 +1,64 @@
+.display {
+    --size-w: 128px;
+    --size-h: 128px;
+
+    margin: 8px;
+    border: 2px solid var(--accent-border);
+    border-radius: 8px;
+    position: relative;
+    width: var(--size-w);
+    height: var(--size-h);
+    background-color: var(--accent-bg);
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    transition: transform 0.01s ease-in;
+}
+
+.display:hover {
+    transform: scale(1.05);
+}
+
+.display h1 {
+    position: relative;
+    margin: 0;
+    font-size: 0.8em;
+    overflow: hidden;
+    padding: 0;
+    text-align: center;
+    height: 3em;
+    max-lines: 2;
+    width: 100%;
+    line-height: 1em;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: var(--text);
+}
+
+.display h1:after {
+    content: '';
+
+    position: absolute;
+    left: 0;
+    bottom: 0;
+
+    width: 100%;
+    height: 2px;
+
+    background-color: var(--accent-border);
+}
+
+.display .price {
+    color: gold;
+    font-size: 0.8em;
+}
+
+.display .iconContainer {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
