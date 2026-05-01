@@ -44,7 +44,7 @@ function App() {
 			<div>Loaded: {allItems?.length}</div>
 			<BasicFlexRow style={{justifyContent: "center"}}>
 				{allItems && (
-					allItems.slice(0, 16).map((allItem) => (
+					allItems.slice(0, 200).map((allItem) => (
 						<ItemDisplaySquare key={allItem.id} id={allItem.id}/>
 					))
 				)}

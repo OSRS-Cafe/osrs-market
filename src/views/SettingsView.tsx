@@ -5,6 +5,8 @@ import NumberFormatDropdown from "../components/NumberFormatDropdown";
 import {useShallow} from "zustand/react/shallow";
 import {useSettingsStore} from "../zustand/SettingsStore.ts";
 import * as React from "react";
+import {useTlStore} from "../zustand/tlStore.ts";
+import LanguageDropdown from "../components/LanguageDropdown";
 
 function SettingsView() {
 	const { detailIcons, setDetailIcons } = useSettingsStore(
@@ -14,6 +16,8 @@ function SettingsView() {
 		}))
 	);
 
+	const tl = useTlStore((s) => s.strings);
+
 	const handleDetailIconsChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		setDetailIcons(e.target.checked);
 	}
@@ -22,8 +26,14 @@ function SettingsView() {
 		<div className={styles.root}>
 			<h3>Settings</h3>
 			<SettingsEntry
-				label="Theme"
-				description="Changes the look of the application"
+				label={"Language"}
+				description={"Language Desc"}
+			>
+				<LanguageDropdown/>
+			</SettingsEntry>
+			<SettingsEntry
+				label={tl.settings.theme}
+				description={tl.settings.theme_desc}
 			>
 				<ThemeDropdown/>
 			</SettingsEntry>
