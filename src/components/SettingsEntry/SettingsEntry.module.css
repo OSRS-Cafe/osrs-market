@@ -1,0 +1,27 @@
+.entry {
+    width: 90%;
+    display: flex;
+    flex-direction: row;
+    background-color: var(--accent-bg);
+    padding: 4px;
+    margin: 8px;
+    border-radius: 8px;
+    box-shadow: var(--shadow);
+}
+
+.entry .left {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+
+    label {
+        font-weight: bold;
+        margin: 0;
+        font-size: 1em;
+    }
+}
+
+.entry .right {
+    display: flex;
+    align-items: center;
+}

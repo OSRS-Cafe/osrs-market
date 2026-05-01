@@ -3,6 +3,7 @@ export { fetchPrices } from "./fetchPrices.ts";
 export { mapFetchPrice } from "./mapFetchPrice.ts";
 export { mapFetchMapping } from "./mapFetchMapping.ts";
 export { checkPriceNeedsUpdate } from "./checkPriceNeedsUpdate.ts";
+export { getIconByMapping } from "./getIconByMapping.ts";
 
 export type {
 	FetchMappingType,

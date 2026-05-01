@@ -6,10 +6,14 @@ import {useMarketDataStore} from "./zustand/MarketDataStore.ts";
 import {useShallow} from "zustand/react/shallow";
 import BasicFlexRow from "./components/BasicFlexRow";
 import ItemDisplaySquare from "./components/ItemDisplaySquare";
+import SettingsView from "./views/SettingsView.tsx";
 
 function App() {
 	const { loadMarketData, updateMarketData } = useMarketDataStore(
-		useShallow((state) => ({ loadMarketData: state.load, updateMarketData: state.update }))
+		useShallow((state) => ({
+			loadMarketData: state.load,
+			updateMarketData: state.update
+		}))
 	);
 	const allItems = useMarketDataStore((s) => s.mapping?.all);
 
@@ -33,13 +37,14 @@ function App() {
 	return (
 		<>
 			<p>App</p>
+			<SettingsView/>
 			<PriceDisplay value={123456789}/><br/>
 			<ThemeDropdown />
 			<NumberFormatDropdown/>
 			<div>Loaded: {allItems?.length}</div>
 			<BasicFlexRow style={{justifyContent: "center"}}>
 				{allItems && (
-					allItems.slice(0, 256).map((allItem) => (
+					allItems.slice(0, 16).map((allItem) => (
 						<ItemDisplaySquare key={allItem.id} id={allItem.id}/>
 					))
 				)}
