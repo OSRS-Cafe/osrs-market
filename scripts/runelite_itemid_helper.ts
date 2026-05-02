@@ -1,5 +1,8 @@
+// @ts-expect-error This works as intended
 import fs from "node:fs";
+// @ts-expect-error This also works as intended
 import path from "path";
+
 export { };
 
 const FILE_URL: string = "https://raw.githubusercontent.com/runelite/runelite/refs/heads/master/runelite-api/src/main/java/net/runelite/api/ItemID.java";
