@@ -5,6 +5,8 @@ import path from "path";
 
 export { };
 
+const MAPPING_URL: string = "https://prices.runescape.wiki/api/v1/osrs/mapping";
+
 const FILE_URL: string = "https://raw.githubusercontent.com/runelite/runelite/refs/heads/master/runelite-api/src/main/java/net/runelite/api/ItemID.java";
 const ITEM_ID_REGEX: RegExp = /public static final int (\w+) = (\d+);/g;
 
@@ -20,6 +22,8 @@ if(!response.ok) {
 }
 
 const content: string = await response.text();
+const marketMapping: { id: number }[] = await (await fetch(MAPPING_URL)).json();
+const marketIds: number[] = marketMapping.map(market => market.id);
 
 Logger("Parsing...");
 
@@ -28,7 +32,7 @@ const itemIDs: { key: string, id: number }[] = content.matchAll(ITEM_ID_REGEX).t
 		key: match[1],
 		id: Number(match[2])
 	}
-});
+}).filter((item) => marketIds.includes(item.id));
 
 Logger(`Found ${itemIDs.length} item ids`);
 
