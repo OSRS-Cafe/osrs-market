@@ -9,3 +9,13 @@
     padding: 8px;
     margin-top: 5vw;
 }
+
+.listContainer {
+    justify-content: center;
+    flex-wrap: wrap;
+    border-radius: 16px;
+    background-color: var(--accent-bg);
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+}

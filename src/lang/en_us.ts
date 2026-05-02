@@ -4,6 +4,8 @@ export const en_us: TranslationStrings = {
 	tl_name: "English (US)",
 	app_name: "OSRS Market",
 	settings: {
+		lang: "Language",
+		lang_desc: "The Language the website will be displayed with",
 		theme: "Theme",
 		theme_desc: "Changes the look of the application",
 		number_format: "Number Format",

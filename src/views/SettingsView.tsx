@@ -7,6 +7,7 @@ import {useSettingsStore} from "../zustand/SettingsStore.ts";
 import * as React from "react";
 import {useTlStore} from "../zustand/tlStore.ts";
 import LanguageDropdown from "../components/LanguageDropdown";
+import PriceDisplay from "../components/PriceDisplay";
 
 function SettingsView() {
 	const { detailIcons, setDetailIcons } = useSettingsStore(
@@ -22,33 +23,25 @@ function SettingsView() {
 		setDetailIcons(e.target.checked);
 	}
 
+	const numberFormatDesc = <span>{tl.settings.number_format_desc} <PriceDisplay value={123456789}/></span>;
+
 	return (
 		<div className={styles.root}>
 			<h3>Settings</h3>
-			<SettingsEntry
-				label={"Language"}
-				description={"Language Desc"}
-			>
+
+			<SettingsEntry label={tl.settings.lang} description={tl.settings.lang_desc}>
 				<LanguageDropdown/>
 			</SettingsEntry>
-			<SettingsEntry
-				label={tl.settings.theme}
-				description={tl.settings.theme_desc}
-			>
+
+			<SettingsEntry label={tl.settings.theme} description={tl.settings.theme_desc}>
 				<ThemeDropdown/>
 			</SettingsEntry>
 
-			<SettingsEntry
-				label="Number Format"
-				description="How the Prices are formatted"
-			>
+			<SettingsEntry label={tl.settings.number_format} description={numberFormatDesc}>
 				<NumberFormatDropdown/>
 			</SettingsEntry>
 
-			<SettingsEntry
-				label="Detail Icons"
-				description="Use High Res Icons for Items"
-			>
+			<SettingsEntry label={tl.settings.detail_icons} description={tl.settings.detail_icons_desc}>
 				<input onChange={handleDetailIconsChange} type="checkbox" checked={detailIcons} />
 			</SettingsEntry>
 		</div>

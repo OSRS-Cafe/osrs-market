@@ -1,0 +1,27 @@
+import {ItemID} from "../item-ids.ts";
+
+export const rune_list: number[] = [
+	ItemID.FIRE_RUNE,
+	ItemID.WATER_RUNE,
+	ItemID.AIR_RUNE,
+	ItemID.EARTH_RUNE,
+	ItemID.MIND_RUNE,
+	ItemID.BODY_RUNE,
+	ItemID.DEATH_RUNE,
+	ItemID.NATURE_RUNE,
+	ItemID.CHAOS_RUNE,
+	ItemID.LAW_RUNE,
+	ItemID.COSMIC_RUNE,
+	ItemID.BLOOD_RUNE,
+	ItemID.SOUL_RUNE,
+	ItemID.STEAM_RUNE,
+	ItemID.MIST_RUNE,
+	ItemID.DUST_RUNE,
+	ItemID.SMOKE_RUNE,
+	ItemID.MUD_RUNE,
+	ItemID.LAVA_RUNE,
+	ItemID.ASTRAL_RUNE,
+	ItemID.WRATH_RUNE,
+	ItemID.SUNFIRE_RUNE,
+	ItemID.AETHER_RUNE,
+];

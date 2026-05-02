@@ -1,12 +1,11 @@
-import ThemeDropdown from "./components/ThemeDropdown";
-import PriceDisplay from "./components/PriceDisplay";
-import NumberFormatDropdown from "./components/NumberFormatDropdown";
 import {useEffect} from "react";
 import {useMarketDataStore} from "./zustand/MarketDataStore.ts";
 import {useShallow} from "zustand/react/shallow";
-import BasicFlexRow from "./components/BasicFlexRow";
-import ItemDisplaySquare from "./components/ItemDisplaySquare";
+import {Route, Routes} from "react-router";
+import CoreLayout from "./views/CoreLayout/CoreLayout.tsx";
+import {useSettingsStore} from "./zustand/SettingsStore.ts";
 import SettingsView from "./views/SettingsView.tsx";
+import ListsView from "./views/ListsView.tsx";
 
 function App() {
 	const { loadMarketData, updateMarketData } = useMarketDataStore(
@@ -15,7 +14,12 @@ function App() {
 			updateMarketData: state.update
 		}))
 	);
-	const allItems = useMarketDataStore((s) => s.mapping?.all);
+
+	const theme = useSettingsStore((s) => s.theme);
+
+	useEffect(() => {
+		document.documentElement.setAttribute("data-theme", theme);
+	}, [theme]);
 
 	useEffect(() => {
 		let updateIntervalId: number = 0;
@@ -36,21 +40,17 @@ function App() {
 
 	return (
 		<>
-			<p>App</p>
-			<SettingsView/>
-			<PriceDisplay value={123456789}/><br/>
-			<ThemeDropdown />
-			<NumberFormatDropdown/>
-			<div>Loaded: {allItems?.length}</div>
-			<BasicFlexRow style={{justifyContent: "center"}}>
-				{allItems && (
-					allItems.slice(0, 200).map((allItem) => (
-						<ItemDisplaySquare key={allItem.id} id={allItem.id}/>
-					))
-				)}
-			</BasicFlexRow>
+			<Routes>
+				<Route element={<CoreLayout/>}>
+					<Route index element={<p>Home</p>} />
+					<Route path="lists" element={<ListsView/>} />
+					<Route path="calculator" element={<p>Calculator</p>} />
+					<Route path="settings" element={<SettingsView/>} />
+				</Route>
+			</Routes>
 		</>
 	);
+
 }
 
 export default App

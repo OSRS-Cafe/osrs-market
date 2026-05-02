@@ -1,9 +1,9 @@
 import styles from "./SettingsEntry.module.css";
-import type {ReactNode} from "react";
+import type {JSX, ReactNode} from "react";
 
 type Props = {
 	label: string;
-	description: string;
+	description: string | JSX.Element;
 	children: ReactNode;
 }
 
