@@ -1,0 +1,18 @@
+import {ItemID} from "../item-ids.ts";
+
+export const log_list = [
+	ItemID.LOGS,
+	ItemID.OAK_LOGS,
+	ItemID.WILLOW_LOGS,
+	ItemID.TEAK_LOGS,
+	ItemID.MAPLE_LOGS,
+	ItemID.MAHOGANY_LOGS,
+	ItemID.YEW_LOGS,
+	ItemID.CAMPHOR_LOGS,
+	ItemID.MAGIC_LOGS,
+	ItemID.IRONWOOD_LOGS,
+	ItemID.REDWOOD_LOGS,
+	ItemID.ROSEWOOD_LOGS,
+	ItemID.ACHEY_TREE_LOGS,
+	ItemID.ARCTIC_PINE_LOGS
+];
