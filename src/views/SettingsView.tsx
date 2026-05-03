@@ -4,10 +4,12 @@ import ThemeDropdown from "../components/ThemeDropdown";
 import NumberFormatDropdown from "../components/NumberFormatDropdown";
 import {useShallow} from "zustand/react/shallow";
 import {useSettingsStore} from "../zustand/SettingsStore.ts";
-import * as React from "react";
 import {useTlStore} from "../zustand/tlStore.ts";
 import LanguageDropdown from "../components/LanguageDropdown";
 import PriceDisplay from "../components/PriceDisplay";
+import Dropdown from "../components/Dropdown";
+import {useState} from "react";
+import CheckBox from "../components/checkbox";
 
 function SettingsView() {
 	const { detailIcons, setDetailIcons } = useSettingsStore(
@@ -19,11 +21,9 @@ function SettingsView() {
 
 	const tl = useTlStore((s) => s.strings);
 
-	const handleDetailIconsChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-		setDetailIcons(e.target.checked);
-	}
-
 	const numberFormatDesc = <span>{tl.settings.number_format_desc} <PriceDisplay value={123456789}/></span>;
+
+	const [test, setTest] = useState<string>("test2");
 
 	return (
 		<div className={styles.root}>
@@ -41,8 +41,16 @@ function SettingsView() {
 				<NumberFormatDropdown/>
 			</SettingsEntry>
 
+			<SettingsEntry label={"Test"} description={"Test Description"}>
+				<Dropdown value={test} onChange={(v) => setTest(v)}>
+					<span key="test1">Test 1</span>
+					<span key="test2">Test 2</span>
+					<span key="test3">Test 3</span>
+				</Dropdown>
+			</SettingsEntry>
+
 			<SettingsEntry label={tl.settings.detail_icons} description={tl.settings.detail_icons_desc}>
-				<input onChange={handleDetailIconsChange} type="checkbox" checked={detailIcons} />
+				<CheckBox onChange={setDetailIcons} value={detailIcons} />
 			</SettingsEntry>
 		</div>
 	);

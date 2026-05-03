@@ -1,0 +1,36 @@
+.carousel {
+    --speed: 10s;
+
+    display: flex;
+    flex-direction: row;
+    width: 40vw;
+    overflow: hidden;
+    background-color: var(--code-bg);
+    border: 2px solid var(--accent-border);
+    border-radius: 15px;
+    margin: 16px;
+
+    &:hover .group {
+        animation-play-state: paused;
+    }
+}
+
+.card {
+
+}
+
+.group {
+    display: flex;
+    flex-direction: row;
+    will-change: transform;
+    animation: scrolling var(--speed) linear infinite;
+}
+
+@keyframes scrolling {
+    0% {
+        transform: translateX(0);
+    }
+    100% {
+        transform: translateX(-100%);
+    }
+}
