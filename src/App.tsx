@@ -6,6 +6,7 @@ import CoreLayout from "./views/CoreLayout/CoreLayout.tsx";
 import {useSettingsStore} from "./zustand/SettingsStore.ts";
 import SettingsView from "./views/SettingsView.tsx";
 import ListsView from "./views/ListsView.tsx";
+import HomeView from "./views/HomeView.tsx";
 
 function App() {
 	const { loadMarketData, updateMarketData } = useMarketDataStore(
@@ -30,7 +31,7 @@ function App() {
 			updateIntervalId = setInterval(async () => {
 				//Update Prices and wait until that is done.
 				await updateMarketData();
-			}, 10_000);
+			}, 60_000);
 		});
 
 		return () => {
@@ -42,7 +43,7 @@ function App() {
 		<>
 			<Routes>
 				<Route element={<CoreLayout/>}>
-					<Route index element={<p>Home</p>} />
+					<Route index element={<HomeView/>} />
 					<Route path="lists" element={<ListsView/>} />
 					<Route path="calculator" element={<p>Calculator</p>} />
 					<Route path="settings" element={<SettingsView/>} />
