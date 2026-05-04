@@ -9,14 +9,16 @@ import ListsView from "./views/ListsView.tsx";
 import HomeView from "./views/HomeView.tsx";
 
 function App() {
-	const { loadMarketData, updateMarketData } = useMarketDataStore(
+	const { updateMappings, updatePrices, updateAverages } = useMarketDataStore(
 		useShallow((state) => ({
-			loadMarketData: state.load,
-			updateMarketData: state.update
+			updateMappings: state.updateMappings,
+			updatePrices: state.updatePrices,
+			updateAverages: state.updateAverages
 		}))
 	);
 
 	const theme = useSettingsStore((s) => s.theme);
+	const averageKey = useSettingsStore((s) => s.averagesKey);
 
 	useEffect(() => {
 		document.documentElement.setAttribute("data-theme", theme);
@@ -25,19 +27,21 @@ function App() {
 	useEffect(() => {
 		let updateIntervalId: number = 0;
 
-		//On initial app load, load Market Data. This gets Mappings and Prices.
-		loadMarketData().then(() => {
-			//Once that is done, start an Interval that requests Prices regularly.
+		updateMappings().then(async () => {
+			await updatePrices();
+			await updateAverages(averageKey);
+
 			updateIntervalId = setInterval(async () => {
-				//Update Prices and wait until that is done.
-				await updateMarketData();
+				await updatePrices();
+				if(averageKey == "5m" || averageKey == "10m")
+					await updateAverages(averageKey);
 			}, 60_000);
 		});
 
 		return () => {
 			clearInterval(updateIntervalId);
 		};
-	}, [loadMarketData, updateMarketData]);
+	}, [averageKey, updateAverages, updateMappings, updatePrices]);
 
 	return (
 		<>

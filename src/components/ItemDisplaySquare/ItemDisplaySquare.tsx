@@ -1,4 +1,4 @@
-import type {ItemID} from "../../utils/grand-exchange";
+import type {ItemID} from "../../utils/market-data";
 import styles from "./ItemDisplaySquare.module.css";
 import SkeletonText from "../SkeletonText";
 import ItemIcon from "../ItemIcon";
@@ -12,23 +12,23 @@ type Props = {
 
 //TODO: Add ability to display price changes with slotmachine like animation
 function ItemDisplaySquare({ id }: Props) {
-	const { isReady, mapping, price } = useMarketDataStore(
+	const { name, examine, price } = useMarketDataStore(
 		useShallow((state) => ({
-			isReady: state.isReady,
-			mapping: state.mapping?.byId?.[id],
-			price: state.prices?.byId?.[id]
+			name: state.data.mapping?.byId?.[id]?.name,
+			examine: state.data.mapping?.byId?.[id]?.examine,
+			price: state.data.prices?.byId?.[id]?.high
 		}))
 	);
 
 	return (
-		<div title={mapping?.examine} className={styles.display}>
-			<h1><SkeletonText w={20} show={isReady}>{mapping?.name}</SkeletonText></h1>
+		<div title={examine ?? "Loading Examine Text..."} className={styles.display}>
+			<h1><SkeletonText w={20} show={name != null}>{name}</SkeletonText></h1>
 			<div className={styles.iconContainer}>
 				<ItemIcon width={64} height={64} id={id} />
 			</div>
 			<div className={styles.price}>
-				<SkeletonText w={40} show={isReady}>
-					<PriceDisplay value={price?.high ?? 0}/>
+				<SkeletonText w={40} show={price != null}>
+					<PriceDisplay value={price ?? 0}/>
 				</SkeletonText>
 			</div>
 		</div>

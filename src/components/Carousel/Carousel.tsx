@@ -16,8 +16,8 @@ function Carousel({ speed = 15, clones = 2, children }: Props) {
 	const groups: ReactElement[] = [];
 	for(let i = 0; i < clones; i++) {
 		groups.push(
-			<div className={styles.group}>
-				{children.map((item) => <div className={styles.card} key={item.key}>{item}</div> )}
+			<div className={styles.group} key={`group-${i}`}>
+				{children.map((item, index) => <div className={styles.card} key={item.key ?? index}>{item}</div> )}
 			</div>
 		);
 	}

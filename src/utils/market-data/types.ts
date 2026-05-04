@@ -15,8 +15,19 @@ export type ItemMapping = {
 }
 
 export type ItemPrice = {
+	id: ItemID;
 	high: GP;
 	highTime: Timestamp;
 	low: GP;
 	lowTime: Timestamp;
 }
+
+export type ItemAverage = {
+	id: ItemID;
+	avgHighPrice: number;
+	highPriceVolume: number;
+	avgLowPrice: number;
+	lowPriceVolume: number;
+}
+
+export type AveragesKey = "5m" | "10m" | "24h";

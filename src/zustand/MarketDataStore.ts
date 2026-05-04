@@ -1,103 +1,148 @@
+import {type AveragesKey, isItemAverageEqual, transformRuneliteAverage} from "../utils/market-data";
 import {
-	checkPriceNeedsUpdate,
-	fetchMappings,
-	fetchPrices, type FetchPriceType,
+	isItemPriceEqual,
 	type ItemMapping,
 	type ItemPrice,
-	mapFetchMapping,
-	mapFetchPrice
-} from "../utils/grand-exchange";
+	transformRuneliteMapping,
+	transformRunelitePrice
+} from "../utils/market-data";
+import {
+	RuneliteAPI,
+	type RuneliteAveragesResponse,
+	type RuneliteMapping,
+	type RuneliteMappingsResponse,
+	type RunelitePricesResponse
+} from "../utils/api/runelite";
 import {create} from "zustand";
+import type {ItemAverage} from "../utils/market-data/types.ts";
 
 type MarketDataStore = {
-	isLoading: boolean;
-	isReady: boolean;
+	data: {
+		mapping: {
+			byId: Record<number, ItemMapping>;
+			all: ItemMapping[];
+		} | null;
 
-	mapping: {
-		byId: Record<number, ItemMapping> | null;
-		all: ItemMapping[] | null;
-	} | null;
+		prices: {
+			byId: Record<number, ItemPrice>;
+			all: ItemPrice[];
+		} | null;
 
-	prices: {
-		byId: Record<number, ItemPrice> | null;
-	} | null;
-
-	load: () => Promise<void>;
-	update: () => Promise<void>;
+		averages: {
+			key: AveragesKey;
+			byId: Record<number, ItemAverage>;
+			all: ItemAverage[];
+		} | null;
+	};
+	updateMappings: () => Promise<void>;
+	updatePrices: () => Promise<void>;
+	updateAverages: (key: AveragesKey) => Promise<void>;
 };
 
 export const useMarketDataStore = create<MarketDataStore>()((set, get) => ({
-	isLoading: false,
-	isReady: false,
-
-	mapping: null,
-	prices: null,
-
-	load: async () => {
-		if (get().isLoading || get().isReady) return;
-		set({ isLoading: true });
-
-		try {
-			const mappingsRaw = await fetchMappings();
-			const pricesRaw = await fetchPrices();
-
-			const mappings = mappingsRaw.map(mapFetchMapping);
-			const prices: Record<number, ItemPrice> = {};
-
-			for(const key in pricesRaw.data) {
-				const priceRaw = pricesRaw.data[key];
-				prices[key] = mapFetchPrice(priceRaw);
-			}
-
-			set({
-				isLoading: false,
-				isReady: true,
-
-				mapping: {
-					byId: Object.fromEntries(mappings.map((item) => [item.id, item])),
-					all: mappings
-				},
-
-				prices: {
-					byId: prices,
-				}
-			});
-		} catch (e) {
-			console.error(e);
-			set({ isLoading: false });
-		}
+	data: {
+		mapping: null,
+		prices: null,
+		averages: null
 	},
 
-	update: async () => {
-		try {
-			const currentStore: MarketDataStore = get();
+	updateMappings: async () => {
+		const mappingsResponse: RuneliteMappingsResponse = await RuneliteAPI.getMappings();
+		const mappings: RuneliteMapping[] = mappingsResponse.map(transformRuneliteMapping);
+		const mappingsById: Record<number, RuneliteMapping> = Object.fromEntries(mappings.map((item) => [item.id, item]));
 
-			const newData: Record<number, FetchPriceType> = {};
-			const newPriceData: Record<number, FetchPriceType> = (await fetchPrices()).data;
+		const current: MarketDataStore = get();
 
-			for (const key in newPriceData) {
-				const newItem = mapFetchPrice(newPriceData[key]);
-				const currentItem = currentStore.prices?.byId![key];
-
-				// Add new data if we don't have it yet, or it needs to be updated, otherwise add the old one.
-				if(currentItem == null || checkPriceNeedsUpdate(currentItem, newItem)) {
-					newData[key] = newItem;
-				} else {
-					newData[key] = currentItem;
+		set({
+			...current,
+			data: {
+				...current.data,
+				mapping: {
+					byId: mappingsById,
+					all: mappings
 				}
 			}
+		});
+	},
 
-			set({
-				isLoading: currentStore.isLoading,
-				isReady: currentStore.isReady,
-				mapping: currentStore.mapping,
-				prices: {
-					byId: newData
+	updatePrices: async () => {
+		const current: MarketDataStore = get();
+		const pricesResponse: RunelitePricesResponse = await RuneliteAPI.getPrices();
+
+		const currentPrices: Record<number, ItemPrice> | null = current.data.prices?.byId ?? null;
+
+		const newPrices: Record<number, ItemPrice> = {};
+
+		if(currentPrices) {
+			for(const key in currentPrices) {
+				const newItem = transformRunelitePrice(pricesResponse.data[key], Number(key));
+				const currentItem = currentPrices[key];
+
+				// Add new data if we don't have it yet, or it needs to be updated, otherwise add the old one.
+				if(isItemPriceEqual(currentItem, newItem)) {
+					newPrices[key] = currentItem;
+				} else {
+					newPrices[key] = newItem;
 				}
-			})
-		} catch (e) {
-			console.error(e);
-			set({ isLoading: false });
+			}
+		} else {
+			for(const key in pricesResponse.data) {
+				newPrices[key] = transformRunelitePrice(pricesResponse.data[key], Number(key));
+			}
 		}
+
+		const allPrices = Object.keys(newPrices).map(key => newPrices[Number(key)]);
+
+		set({
+			...current,
+			data: {
+				...current.data,
+				prices: {
+					byId: newPrices,
+					all: allPrices
+				}
+			}
+		});
+	},
+
+	updateAverages: async (key: AveragesKey) => {
+		const current: MarketDataStore = get();
+
+		const averagesResponse: RuneliteAveragesResponse = await RuneliteAPI.getAverages(key);
+
+		const currentKey: AveragesKey = current.data.averages?.key ?? key;
+		const currentAverages: Record<number, ItemAverage> | null = current.data.averages?.byId ?? null;
+
+		const newAverages: Record<number, ItemAverage> = {};
+
+		if(currentKey == key && currentAverages != null) {
+			for(const key in averagesResponse.data) {
+				const average: ItemAverage = transformRuneliteAverage(averagesResponse.data[key], Number(key));
+				const current: ItemAverage = currentAverages[key];
+				if(isItemAverageEqual(average, current)) {
+					newAverages[key] = current;
+				} else {
+					newAverages[key] = average;
+				}
+			}
+		} else {
+			for(const key in averagesResponse.data) {
+				newAverages[key] = transformRuneliteAverage(averagesResponse.data[key], Number(key));
+			}
+		}
+
+		const allAverages = Object.keys(newAverages).map(key => newAverages[Number(key)]);
+
+		set({
+			...current,
+			data: {
+				...current.data,
+				averages: {
+					key: key,
+					byId: newAverages,
+					all: allAverages
+				}
+			}
+		});
 	}
 }));

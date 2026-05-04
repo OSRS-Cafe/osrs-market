@@ -1,0 +1,36 @@
+.panel {
+    font-family: var(--mono), serif;
+    background-color: var(--code-bg);
+    margin: 4px 10px 20px 10px;
+    padding: 10px 0 10px 0;
+    border-radius: 4px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    overflow-y: auto;
+
+    span {
+        font-size: 0.75em;
+        line-height: 0.75em;
+    }
+
+    .container {
+        width: fit-content;
+        background-color: color-mix(in oklab, var(--code-bg), white 5%);
+        border: 2px solid var(--border);
+        margin: 4px;
+        padding: 4px 10px 4px 10px;
+        display: flex;
+        flex-direction: column;
+
+        span {
+            font-size: 0.5em;
+            line-height: 0.5em;
+        }
+
+        button {
+            margin: 2px;
+        }
+    }
+}

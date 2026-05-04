@@ -1,4 +1,4 @@
-import type {ItemID} from "../../utils/grand-exchange";
+import type {ItemID} from "../../utils/market-data";
 import styles from "./ItemDisplaySmall.module.css";
 import SkeletonText from "../SkeletonText";
 import ItemIcon from "../ItemIcon";

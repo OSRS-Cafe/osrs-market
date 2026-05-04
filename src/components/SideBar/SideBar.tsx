@@ -1,6 +1,7 @@
 import styles from "./SideBar.module.css";
 import {NavLink} from "react-router";
 import test from "../../../package.json";
+import DebugPanel from "../DebugPanel";
 
 function SideBar() {
 	return (
@@ -15,6 +16,7 @@ function SideBar() {
 				<span>Made by OSRS.Cafe | 2026</span>
 				<span>Data Provided by RuneLite & the Runescape Wiki</span>
 			</div>
+			<DebugPanel/>
 		</div>
 	);
 }
